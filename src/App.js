@@ -1,25 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import JobList from "./Components/JobList";
 
-function App() {
+const App = () => {
+  const [jobs, setJobs] = useState([]);
+
+  useEffect(() => {
+    const fetchJobs = async () => {
+      try {
+        
+        const response = await axios.get("/data/jobs.json"); 
+        // console.log("Fetched Jobs:", response.data); 
+        setJobs(response.data);
+      } catch (error) {
+        console.error("Error fetching jobs:", error);
+      }
+    };
+
+    fetchJobs();
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="min-h-screen bg-gray-100 p-6">
+      <h1 className="text-2xl font-bold text-center mb-6">AI-Powered Job Match Dashboard</h1>
+      <JobList jobs={jobs} />
     </div>
   );
-}
+};
 
 export default App;
